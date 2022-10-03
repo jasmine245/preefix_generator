@@ -1,4 +1,3 @@
-import { IfStmt, THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Component } from '@angular/core';
 
 @Component({
@@ -12,7 +11,7 @@ export class AppComponent {
   first_chars:any = '';
   search_word_length:any='';
   alphabets = "ABCDEFGHIJKLMANOPQRSTUVWXYZ";
-  alpha_numerics = "ABCDEFGHIJKLMANOPQRSTUVWXYZ1234567890";
+  alpha_numerics = "1234567890";
   curr_sugg:any = '';
   selected_suggestion_title = '';
   selected_suggestions = {};
@@ -69,7 +68,11 @@ export class AppComponent {
         if(this.search_word_length == 2){
           result = this.search_word.charAt(0) + this.search_word.charAt(1) + this.generate_randoms(1);
         }else{
-          result = this.search_word.charAt(0) + unique_chars.charAt(unique_chars.length/2) + unique_chars.charAt(unique_chars.length -1) + this.generate_randoms(0);
+          if(unique_chars.length < 4){
+            result = this.search_word.charAt(0) + unique_chars.charAt(unique_chars.length/2) + unique_chars.charAt(unique_chars.length -1) + this.generate_randoms(0);
+          }else{
+            result = this.search_word.charAt(0) + unique_chars.charAt(2) + unique_chars.charAt(3) + this.generate_randoms(0,1,unique_chars.substring(4,unique_chars.length));
+          }
         }
         if(result != this.selected_suggestions[result]){
           this.new_set.add(result);
@@ -85,13 +88,17 @@ export class AppComponent {
 
   }
 
-  generate_randoms(sugg_count,len=1){
+  generate_randoms(sugg_count,len=1, input_unique_chars = this.alphabets){
     let randomString = '';
-    for(let j=0;j<sugg_count;j++){
-      for ( let i = 0; i < len; i++) {
-        randomString += this.alphabets.charAt(Math.floor(Math.random()*this.alphabets.length));
+    this.alpha_numerics = "1234567890";
+    if(input_unique_chars == this.alphabets){
+      for(let j=0;j<sugg_count;j++){
+        for ( let i = 0; i < len; i++) {
+          randomString += this.alphabets.charAt(Math.floor(Math.random()*input_unique_chars.length));
+        }
       }
     }
+    this.alpha_numerics = input_unique_chars + this.alpha_numerics;
     for ( let i = 0; i < len; i++ ) {
       randomString += this.alpha_numerics.charAt(Math.floor(Math.random()*this.alpha_numerics.length));
     }
