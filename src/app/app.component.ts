@@ -58,6 +58,7 @@ export class AppComponent {
   }
 
   get_sugg_without_spaces(){
+    let unique_chars = this.find_unique_chars();
     let result = '';
     this.invalid_text = false;
     this.search_word_length = this.search_word.length;
@@ -68,7 +69,7 @@ export class AppComponent {
         if(this.search_word_length == 2){
           result = this.search_word.charAt(0) + this.search_word.charAt(1) + this.generate_randoms(1);
         }else{
-          result = this.search_word.charAt(0) + this.search_word.charAt(this.generate_random_index((this.search_word_length/2) - 1)) + this.search_word.charAt(this.generate_random_index(this.search_word_length - 1)) + this.generate_randoms(0);
+          result = this.search_word.charAt(0) + unique_chars.charAt(unique_chars.length/2) + unique_chars.charAt(unique_chars.length -1) + this.generate_randoms(0);
         }
         if(result != this.selected_suggestions[result]){
           this.new_set.add(result);
@@ -77,9 +78,11 @@ export class AppComponent {
     }
   }
 
-  generate_random_index(max_limit){
-    let random_index = Math.floor(Math.random()*max_limit)+1;
-    return random_index;
+  find_unique_chars(){
+    return [...this.input_word].reduce((acc, curr)=>{
+      return acc.includes(curr) ?  acc  :  acc + curr;
+    }, "");
+
   }
 
   generate_randoms(sugg_count,len=1){
