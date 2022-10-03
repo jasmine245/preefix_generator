@@ -13,7 +13,6 @@ export class AppComponent {
   search_word_length:any='';
   alphabets = "ABCDEFGHIJKLMANOPQRSTUVWXYZ";
   alpha_numerics = "ABCDEFGHIJKLMANOPQRSTUVWXYZ1234567890";
-  sugg_count:any = 0;
   curr_sugg:any = '';
   selected_suggestion_title = '';
   selected_suggestions = {};
@@ -40,7 +39,6 @@ export class AppComponent {
 
   get_sugg_with_spaces(){
     let result = '', result_sub_str = '';
-    this.sugg_count = 0;
     while(this.new_set.size<=3){
       if(this.first_chars.length <= 3){
         result = this.first_chars + this.generate_randoms(3 - this.first_chars.length);
@@ -60,19 +58,27 @@ export class AppComponent {
 
   get_sugg_without_spaces(){
     let result = '';
-    this.sugg_count = 0;
     this.invalid_text = false;
     this.search_word_length = this.search_word.length;
     if(this.search_word_length <2){
       this.invalid_text = true;
     }else{
       while(this.new_set.size<=3){
-        result = this.search_word.charAt(0) + this.search_word.charAt(this.search_word_length - 1) + this.generate_randoms(1);
+        if(this.search_word_length == 2){
+          result = this.search_word.charAt(0) + this.search_word.charAt(1) + this.generate_randoms(1);
+        }else{
+          result = this.search_word.charAt(0) + this.search_word.charAt(this.generate_random_index((this.search_word_length/2) - 1)) + this.search_word.charAt(this.generate_random_index(this.search_word_length - 1)) + this.generate_randoms(0);
+        }
         if(result != this.selected_suggestions[result]){
           this.new_set.add(result);
         }
       }
     }
+  }
+
+  generate_random_index(max_limit){
+    let random_index = Math.floor(Math.random()*max_limit)+1;
+    return random_index;
   }
 
   generate_randoms(sugg_count,len=1){
@@ -101,7 +107,6 @@ export class AppComponent {
     this.no_selected_sugg = false;
     this.input_word = '';
     this.invalid_text = false;
-    this.sugg_count = 0;
     this.new_set.clear();
     this.curr_sugg = '';
   }
