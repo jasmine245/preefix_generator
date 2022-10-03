@@ -1,21 +1,22 @@
 <div>
   <p style="color: red;" *ngIf="invalid_text">PLEASE ENTER ATLEAT 2 CHARACHTERS.</p>
   <p style="color: red;" *ngIf="no_selected_sugg">PLEASE SELECT A SUGGESTION.</p>
+  <label>Enter a string: </label>
   <input (keyup)="valueToUpperCase($event.target.value)" type="text" [(ngModel)]="input_word">
-  <button (click)="search_tnt_prefix()">Search</button>
+  <button (click)="search_tnt_prefix()" style="margin-left: 7px;">Search</button>
 </div>
-<div *ngIf="new_set.size">
-  <label>Select any suggestion:</label>
+<div *ngIf="new_set.size" style="margin-top: 5px;">
+  <label>Select any suggestion: </label>
   <select [(ngModel)]="curr_sugg">
     <option value="" selected>--</option>
     <option *ngFor="let sugg of new_set" [value]="sugg">{{sugg}}</option>
   </select>
-  <button (click)="save_suggestion()">Save Suggestion</button>
+  <button (click)="save_suggestion()"style="margin-left: 7px;" >Save Suggestion</button>
 </div>
 <div>
   <table>
     <tr>
-      <th>Selected Tenant Prefixes</th>
+      <th>Selected Tenant Prefixes suggestions are: </th>
     </tr>
     <tr *ngFor="let sugg of selected_suggestions | keyvalue">
       <td>{{sugg.key}}</td>
