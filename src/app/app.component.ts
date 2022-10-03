@@ -22,6 +22,7 @@ export class AppComponent {
   
   search_tnt_prefix(){
     this.search_word = this.input_word.replace(/[0-9]/g, '');
+    this.search_word = this.input_word.replace(/[^a-zA-Z0-9 ]/g, '')
     if(this.search_word.includes(' ')){
       this.first_chars = this.search_word.match(/\b(\w)/g).join('');
       if(this.first_chars.length < 2){
